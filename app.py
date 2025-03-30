@@ -44,10 +44,9 @@ swagger_config = {
     "specs_route": "/documentation/swagger/"
 }
 
-API_URL = os.environ.get('API_URL', 'http://localhost:5000/api')
 FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
 MONGODB_URI = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/')
-S3_BUCKET = os.environ.get('S3_BUCKET_NAME', 'rental-ai-ml-images')
+S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
 
 # Initialize S3 client
 s3_client = boto3.client(
@@ -484,7 +483,7 @@ def plot_rent_prices():
             plt.close()
             # Return the local path
             return jsonify({
-                'image_path': f"{API_URL}/static/{filename}"
+                'image_path': f"/static/{filename}"
             })
         
     except Exception as e:
@@ -536,7 +535,7 @@ def plot_rent_histo():
             
             # Return the local path
             return jsonify({
-                'image_path': f"{API_URL}/static/{filename}"
+                'image_path': f"/static/{filename}"
             })
         
     except Exception as e:
