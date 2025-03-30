@@ -18,6 +18,7 @@ from flasgger import Swagger
 from pymongo import MongoClient
 from io import BytesIO
 import pymongo
+from pymongo.server_api import ServerApi
 
 # use Agg backend for plotting
 plt.switch_backend('Agg')
@@ -63,7 +64,7 @@ CORS(app, origins=[FRONTEND_URL])
 swag = Swagger(app, config=swagger_config)
 
 # Initialize MongoDB connection
-client = pymongo.MongoClient(MONGODB_URI)
+client = pymongo.MongoClient(MONGODB_URI, server_api=ServerApi('1'), tls=True)
 db = client['rentalai_db']
 properties_collection = db['properties']
 
