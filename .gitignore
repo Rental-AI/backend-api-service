@@ -1,0 +1,15 @@
+# JetBrains IDEs
+.idea
+
+.ipynb_checkpoints
+
+# virtual environment
+venv/
+
+__pycache__
+
+# environment variables
+.env
+
+
+
