@@ -76,6 +76,9 @@ def load_data_to_mongodb():
         
         # Convert DataFrame to list of dictionaries
         ottawa_records = ottawa_df.to_dict('records')
+
+        #remove null values
+        ottawa_records = [record for record in ottawa_records if record['Property.LeaseRentUnformattedValue'] is not None]
         
         # clear existing data and insert new data
         properties_collection.delete_many({})
