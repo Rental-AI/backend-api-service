@@ -260,7 +260,10 @@ def get_data():
     try:
         # Get all properties from MongoDB
         properties = list(properties_collection.find({}, {'_id': 0}))
-        return jsonify(properties)
+
+        # clean data for json serialization
+        response_data = json.dumps(properties).replace(": NaN", ": null").replace(": Infinity", ": null").replace(": -Infinity", ": null")
+        return response_data
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
