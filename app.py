@@ -1,9 +1,4 @@
 import json
-import pickle
-from datetime import datetime
-
-import numpy as np
-import requests
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from time import sleep
@@ -12,27 +7,21 @@ import os
 from random import randint
 from requests import HTTPError
 import pandas as pd
-from external.realtorAPI import get_coordinates, get_property_list, get_property_details
+from external.realtorAPI import get_property_list
 import matplotlib.pyplot as plt
 from flasgger import Swagger
 from pymongo import MongoClient
 from io import BytesIO
 import pymongo
 from pymongo.server_api import ServerApi
+from dotenv import load_dotenv
+import boto3
 
 # use Agg backend for plotting
 plt.switch_backend('Agg')
 
-from dotenv import load_dotenv
-import boto3
-
 # Load environment variables
 load_dotenv()
-
-import shap
-import plotly.express as px
-from tqdm import tqdm
-from sklearn.metrics import accuracy_score, mean_squared_error, r2_score, mean_absolute_error
 
 swagger_config = {
     "headers": [],
