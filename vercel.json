@@ -4,7 +4,16 @@
     "devCommand": "gunicorn app:app",
     "functions": {
         "app.py": {
-            "runtime": "python"
+            "excludeFiles": [
+                ".next/**",
+                "*.cache/**",
+                "node_modules/**",
+                "public/**",
+                "app/**",
+                "static/**",
+                "templates/**",
+                "external/**"
+            ]
         }
     },
     "routes": [
@@ -12,15 +21,5 @@
             "src": "/(.*)",
             "dest": "app.py"
         }
-    ],
-    "excludeFiles": [
-        ".next/**",
-        "*.cache/**",
-        "node_modules/**",
-        "public/**",
-        "app/**",
-        "static/**",
-        "templates/**",
-        "external/**"
     ]
 }
