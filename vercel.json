@@ -1,22 +1,26 @@
 {
-    "version": 2,
+    "version": 2.1,
     "installCommand": "pip install -r requirements.txt",
     "devCommand": "gunicorn app:app",
-    "builds": [
-        {
-        "src": "app.py",
-        "use": "@vercel/python"
+    "functions": {
+        "app.py": {
+            "runtime": "python"
         }
-    ],
+    },
     "routes": [
         {
-        "src": "/(.*)",
-        "dest": "app.py"
+            "src": "/(.*)",
+            "dest": "app.py"
         }
     ],
-    "functions": {
-        "/**": {
-            "excludeFiles": "{.next,*.cache,node_modules,public,app,static,templates,external}/**"
-        }
-    }
+    "excludeFiles": [
+        ".next/**",
+        "*.cache/**",
+        "node_modules/**",
+        "public/**",
+        "app/**",
+        "static/**",
+        "templates/**",
+        "external/**"
+    ]
 }
