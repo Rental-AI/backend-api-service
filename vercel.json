@@ -1,0 +1,17 @@
+{
+    "version": 1,
+    "installCommand": "pip install -r requirements.txt",
+    "devCommand": "gunicorn app:app",
+    "builds": [
+        {
+        "src": "app.py",
+        "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+        "src": "/(.*)",
+        "dest": "app.py"
+        }
+    ]
+}
