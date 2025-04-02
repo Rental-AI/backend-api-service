@@ -5,9 +5,7 @@ from time import sleep
 from math import ceil
 import os
 from random import randint
-from requests import HTTPError
 import pandas as pd
-from external.realtorAPI import get_property_list
 import matplotlib.pyplot as plt
 from flasgger import Swagger
 from pymongo import MongoClient
@@ -85,48 +83,48 @@ load_data_to_mongodb()
 # def handle_options():
 #     return '', 200, {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*','Content-Type':'application/json'}
 
-def get_property_list_by_city(city, building_type):
-    """ Gets a list of properties for a given city, and caches it. """
+# def get_property_list_by_city(city, building_type):
+#     """ Gets a list of properties for a given city, and caches it. """
 
-    # coords = get_coordinates(city)  # Creates bounding box for city
-    coords = ["44.9617738","45.5376502","-76.3555857","-75.2465783"] # Ottawa
-    max_pages = 1
-    current_page = 1
-    filename = "data/df_2025.csv"
+#     # coords = get_coordinates(city)  # Creates bounding box for city
+#     coords = ["44.9617738","45.5376502","-76.3555857","-75.2465783"] # Ottawa
+#     max_pages = 1
+#     current_page = 1
+#     filename = "data/df_2025.csv"
 
-    # data = pd.DataFrame()
-    if os.path.exists(filename):
-        results_df = pd.read_csv(filename)
-        ## If the queries were interrupted, this will resume from the last page
-        current_page = ceil(results_df.shape[0]/200) + 1
-        max_pages = current_page + 1
-    else:
-        results_df = pd.DataFrame()
-    while current_page <= max_pages:
-        try:
-            data = get_property_list(
-                coords[0], coords[1], 
-                coords[2], coords[3],
-                building_type,
-                current_page=current_page)
-            ## Rounds up the total records by the records per page to nearest int
-            max_pages = ceil(data["Paging"]["TotalRecords"]/data["Paging"]["RecordsPerPage"])
-            for json in data["Results"]:
-                # Use concat instead of append (which is deprecated)
-                new_row = pd.json_normalize(json)
-                results_df = pd.concat([results_df, new_row], ignore_index=True)
+#     # data = pd.DataFrame()
+#     if os.path.exists(filename):
+#         results_df = pd.read_csv(filename)
+#         ## If the queries were interrupted, this will resume from the last page
+#         current_page = ceil(results_df.shape[0]/200) + 1
+#         max_pages = current_page + 1
+#     else:
+#         results_df = pd.DataFrame()
+#     while current_page <= max_pages:
+#         try:
+#             data = get_property_list(
+#                 coords[0], coords[1], 
+#                 coords[2], coords[3],
+#                 building_type,
+#                 current_page=current_page)
+#             ## Rounds up the total records by the records per page to nearest int
+#             max_pages = ceil(data["Paging"]["TotalRecords"]/data["Paging"]["RecordsPerPage"])
+#             for json in data["Results"]:
+#                 # Use concat instead of append (which is deprecated)
+#                 new_row = pd.json_normalize(json)
+#                 results_df = pd.concat([results_df, new_row], ignore_index=True)
 
-            print("continuing: " + str(current_page))
-            # Save after each successful page fetch
-            results_df.to_csv(filename, index=False)
-            current_page += 1
+#             print("continuing: " + str(current_page))
+#             # Save after each successful page fetch
+#             results_df.to_csv(filename, index=False)
+#             current_page += 1
 
-            sleep(randint(600, 900))  # sleep 10-15 minutes to avoid rate-limit
-        except HTTPError:
-            print("Error occurred on city: " + city)
-            sleep(randint(3000, 3600))  # sleep for 50-60 minutes if limited
+#             sleep(randint(600, 900))  # sleep 10-15 minutes to avoid rate-limit
+#         except HTTPError:
+#             print("Error occurred on city: " + city)
+#             sleep(randint(3000, 3600))  # sleep for 50-60 minutes if limited
 
-    return results_df
+#     return results_df
 
 
 # def get_property_details_from_csv(filename):
