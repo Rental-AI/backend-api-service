@@ -1,16 +1,12 @@
 import json
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
-from time import sleep
-from math import ceil
 import os
-from random import randint
 import pandas as pd
 import matplotlib.pyplot as plt
 from flasgger import Swagger
 from pymongo import MongoClient
 from io import BytesIO
-import pymongo
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
 import boto3
@@ -51,7 +47,7 @@ CORS(app, origins=[FRONTEND_URL])
 swag = Swagger(app, config=swagger_config)
 
 # Initialize MongoDB connection
-client = pymongo.MongoClient(MONGODB_URI, server_api=ServerApi('1'), tls=True, tlsAllowInvalidCertificates=True)
+client = MongoClient(MONGODB_URI, server_api=ServerApi('1'), tls=True, tlsAllowInvalidCertificates=True)
 db = client['rentalai_db']
 properties_collection = db['properties']
 
@@ -202,37 +198,37 @@ def list_properties():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/property/<city>', methods=['GET'])
-def update(city):
-    # df_new = get_property_details_from_csv(city)
-    # BuildingTypeId
-    #     1 House
-    #     17 Apartment
-    houses = 1
-    # results_houses = get_property_list_by_city(city, building_type=houses)
+# @app.route('/api/property/<city>', methods=['GET'])
+# def update(city):
+#     # df_new = get_property_details_from_csv(city)
+#     # BuildingTypeId
+#     #     1 House
+#     #     17 Apartment
+#     houses = 1
+#     # results_houses = get_property_list_by_city(city, building_type=houses)
 
-    apartments = 17
-    result_apartments = get_property_list_by_city(city, building_type=apartments)
+#     apartments = 17
+#     result_apartments = get_property_list_by_city(city, building_type=apartments)
 
-    # Check if result_apartments is a DataFrame
-    # if isinstance(result_apartments, pd.DataFrame):
-    #     # Concatenate the two DataFrames
-    #     results_df = pd.concat([results_df, result_apartments], ignore_index=True)
-    # else:
-    #     print(f"Invalid result type: {type(result_apartments)}")
-    #
-    # # Convert DataFrame to a list of dictionaries
-    # data = results_df.to_json(orient='records')
-    #
-    # # Convert the data to JSON
-    # json_data = json.loads(data)
+#     # Check if result_apartments is a DataFrame
+#     # if isinstance(result_apartments, pd.DataFrame):
+#     #     # Concatenate the two DataFrames
+#     #     results_df = pd.concat([results_df, result_apartments], ignore_index=True)
+#     # else:
+#     #     print(f"Invalid result type: {type(result_apartments)}")
+#     #
+#     # # Convert DataFrame to a list of dictionaries
+#     # data = results_df.to_json(orient='records')
+#     #
+#     # # Convert the data to JSON
+#     # json_data = json.loads(data)
 
-    # Concatenate DataFrames
-    concatenated_df = pd.concat([result_apartments], ignore_index=True)
-    # Convert the DataFrame to JSON and return as a response
-    json_data = concatenated_df.to_json(orient='records')
+#     # Concatenate DataFrames
+#     concatenated_df = pd.concat([result_apartments], ignore_index=True)
+#     # Convert the DataFrame to JSON and return as a response
+#     json_data = concatenated_df.to_json(orient='records')
 
-    return json_data
+#     return json_data
 
 
 @app.route('/api/get_data', methods=['GET'])
